@@ -6,13 +6,11 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 indexUrl = "file://" + os.path.abspath("todo.html")
-print(indexUrl)
-
 
 def openBrowser(driver):
     driver.maximize_window()
     driver.get(indexUrl)
-    time.sleep(1)
+    time.sleep(0.5)
 
 
 def submitTask(driver, taskName, taskDesc):
@@ -79,7 +77,6 @@ class TestSuite(unittest.TestCase):
         taskName = "testing task"
         taskDesc = "this task should be checked right now"
         submitTask(driver, taskName, taskDesc)
-        time.sleep(15)
 
         # Attempt to click the checkbox
         table = driver.find_element("id", "todo-table")
@@ -98,6 +95,37 @@ class TestSuite(unittest.TestCase):
 
         # Check the checkbox status
         assert checkBox.is_selected()
+
+    def test_get_all_todos(self):
+        driver = self.driver
+        # Open window
+        openBrowser(driver)
+        # Submit four tasks
+        taskNames = ["t1","t2","t3","t4"]
+        taskDescs = ["d1","d2","d3","d4"]
+        for i in range (0, len(taskNames)):
+            submitTask(driver, taskNames[i], taskDescs[i])
+
+        # Click ListAll button
+        listAllButton = driver.find_element("xpath", "/html/body/div/div/div[2]/button[1]")
+        listAllButton.click()
+
+        # Check entries to make sure that they exist
+        # ,although there may be other elements from a previous run or any other reason
+        table = driver.find_element("id", "todo-table")
+        rows = table.find_elements("xpath", ".//tr")
+        numRows = len(rows)
+        for i in range(1, numRows):
+            row = driver.find_element("id", "row-" + str(i)).find_elements("xpath", ".//td")
+            found_name = row[1].text
+            found_desc = row[2].text
+            try:
+                if found_name in taskNames:
+                    taskNames = taskNames.remove(found_name)
+                    taskDescs = taskDescs.remove(found_desc)
+            except:
+                pass
+        assert taskNames is None or len(taskNames) == 0
 
     def tearDown(self):
         self.driver.close()
