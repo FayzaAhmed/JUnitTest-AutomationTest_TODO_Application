@@ -86,7 +86,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public List<Todo> list() {
         if (todos == null) {
-            throw new IllegalArgumentException("Todo list cannot be null");
+            throw new IllegalArgumentException("Todo list cannot be null"); //unreachable area 
         }
 
         return todos;
@@ -95,7 +95,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public List<Todo> listCompleted() {
         if (todos == null) {
-            throw new IllegalArgumentException("Todo list cannot be null");
+            throw new IllegalArgumentException("Todo list cannot be null"); //unreachable area 
         }
 
         List<Todo> completedTodos = new ArrayList<>();
