@@ -15,6 +15,11 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    @Override
     public Todo create(TodoCreateRequest todo) {
         if (todo == null) {
             throw new IllegalArgumentException("Todo cannot be null");
