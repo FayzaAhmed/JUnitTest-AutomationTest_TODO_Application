@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface TodoService {
 
+    List<Todo> getTodos();
+
     Todo create(TodoCreateRequest todo);
 
     Todo read(String id);
