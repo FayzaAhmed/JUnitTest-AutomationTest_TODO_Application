@@ -13,6 +13,14 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
+
+    //////////////////////////////////////////////////////
+    public TodoController() {           // added it
+        todoService = new TodoServiceImpl();
+    }
+    //////////////////////////////////////////////////////
+
+
     @PostMapping("/create")
     public ResponseEntity<Todo> create(@RequestBody TodoCreateRequest todo) {
         try {
@@ -59,6 +67,7 @@ public class TodoController {
             List<Todo> todos = todoService.list();
             return ResponseEntity.ok(todos);
         } catch (IllegalArgumentException e) {
+            //UNREACHABLE AREA
             return ResponseEntity.badRequest().build();
         }
     }
@@ -69,6 +78,7 @@ public class TodoController {
             List<Todo> todos = todoService.listCompleted();
             return ResponseEntity.ok(todos);
         } catch (IllegalArgumentException e) {
+            //UNREACHABLE AREA
             return ResponseEntity.badRequest().build();
         }
     }
