@@ -10,8 +10,6 @@ import com.fcai.SoftwareTesting.todo.TodoCreateRequest;
 import com.fcai.SoftwareTesting.todo.TodoServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
