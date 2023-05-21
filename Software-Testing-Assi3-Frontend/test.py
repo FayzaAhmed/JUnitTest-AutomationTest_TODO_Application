@@ -5,12 +5,15 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-indexUrl = "file://" + os.path.abspath("todo.html")
+# for the following line to perform correctly the root path should be the folder that contain the test.py file 
+# which is "Software-Testing-Assi3-Frontend"
+indexUrl = "file://" + (os.path.abspath("todo.html")).replace("\\", "/")
 
+print(indexUrl)
 def openBrowser(driver):
     driver.maximize_window()
     driver.get(indexUrl)
-    time.sleep(0.5)
+    time.sleep(5)
 
 
 def submitTask(driver, taskName, taskDesc):
@@ -18,16 +21,18 @@ def submitTask(driver, taskName, taskDesc):
     nameBox = driver.find_element("id", "todo")
     descBox = driver.find_element("id", "desc")
     nameBox.send_keys(taskName)
+    time.sleep(2)
     descBox.send_keys(taskDesc)
+    time.sleep(2)
     # Click submit button
     addButton = driver.find_element("xpath", '//*[@id="todo-form"]/button')
     addButton.click()
-    time.sleep(1)
+    time.sleep(3)
 
 
 class TestSuite(unittest.TestCase):
     def setUp(self):
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Chrome()
 
     def test_new_todo(self):
         driver = self.driver
@@ -63,6 +68,7 @@ class TestSuite(unittest.TestCase):
         numRows = len(rows)
         deleteButton = driver.find_element("xpath", '//*[@id="row-' + str(numRows) + '"]/td[5]/button')
         deleteButton.click()
+        time.sleep(3)
         # Search for the task after it was deleted
         for i in range(1, numRows):
             row = driver.find_element("id", "row-" + str(i)).find_elements("xpath", ".//td")
@@ -84,7 +90,7 @@ class TestSuite(unittest.TestCase):
         numRows = len(rows)
         checkBox = driver.find_element("xpath", '//*[@id="checkbox-' + str(numRows) + '"]')
         checkBox.click()
-
+        time.sleep(3)
         # If message box appears, supress it
         try:
             messagebox = WebDriverWait(driver, 3).until(
@@ -109,7 +115,7 @@ class TestSuite(unittest.TestCase):
         # Click ListAll button
         listAllButton = driver.find_element("xpath", "/html/body/div/div/div[2]/button[1]")
         listAllButton.click()
-
+        time.sleep(3)
         # Check entries to make sure that they exist
         # ,although there may be other elements from a previous run or any other reason
         table = driver.find_element("id", "todo-table")
@@ -132,4 +138,4 @@ class TestSuite(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(warnings='ignore')
+    unittest.main()
