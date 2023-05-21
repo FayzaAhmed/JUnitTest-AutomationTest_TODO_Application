@@ -9,13 +9,13 @@ import java.util.List;
 public class TodoServiceImpl implements TodoService {
     private static List<Todo> todos;
 
-
     public TodoServiceImpl() {
         todos = new ArrayList<Todo>();
     }
 
     @Override
-    public List<Todo> getTodos() {
+    public List<Todo> getTodos() // added
+    {
         return todos;
     }
 
@@ -38,8 +38,7 @@ public class TodoServiceImpl implements TodoService {
                 id,
                 todo.getTitle(),
                 todo.getDescription(),
-                false
-        );
+                false);
 
         todos.add(newTodo);
 
@@ -86,7 +85,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public List<Todo> list() {
         if (todos == null) {
-            throw new IllegalArgumentException("Todo list cannot be null"); //unreachable area 
+            throw new IllegalArgumentException("Todo list cannot be null"); // unreachable area
         }
 
         return todos;
@@ -95,7 +94,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public List<Todo> listCompleted() {
         if (todos == null) {
-            throw new IllegalArgumentException("Todo list cannot be null"); //unreachable area 
+            throw new IllegalArgumentException("Todo list cannot be null"); // unreachable area
         }
 
         List<Todo> completedTodos = new ArrayList<>();
