@@ -4,10 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.fcai.SoftwareTesting.todo.Todo;
 import com.fcai.SoftwareTesting.todo.TodoCreateRequest;
 import com.fcai.SoftwareTesting.todo.TodoServiceImpl;
+import com.fcai.SoftwareTesting.todo.TodoController;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -187,5 +190,179 @@ public class SoftwareTestingApplicationTests {
         TodoServiceImpl todoService = new TodoServiceImpl();
         assertThrows(IllegalArgumentException.class, () -> todoService.listCompleted());
     }
-	
+	/////////////////////////////////////////////////////////////////
+    /*************************************************
+     * Testing TodoController Class
+     ******************************************************/
+
+    // testing function Create()
+    @Test
+    public void TodoControllerTestCreateOk() {
+        TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
+        TodoController controller = new TodoController();
+        ResponseEntity<Todo> response = controller.create(request);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void TodoControllerTestCreateBadRequestEmptyTitle() {
+        TodoCreateRequest request = new TodoCreateRequest("","this is description");
+        TodoController controller = new TodoController();
+        ResponseEntity<Todo> response = controller.create(request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void TodoControllerTestCreateBadRequestEmptyDescription() {
+        TodoCreateRequest request = new TodoCreateRequest("title","");
+        TodoController controller = new TodoController();
+        ResponseEntity<Todo> response = controller.create(request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    public void TodoControllerTestCreateBadRequestEmptyDescriptionAndTitle() {
+        TodoCreateRequest request = new TodoCreateRequest("","");
+        TodoController controller = new TodoController();
+        ResponseEntity<Todo> response = controller.create(request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+    //------------------------------------------------------------------------------
+    // testing function Read()
+    @Test
+    public void TodoControllerTestReadOk() {
+        // creating a todo before reading it
+        TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
+        TodoController controller = new TodoController();
+        controller.create(request);
+
+        String id = "1";
+        ResponseEntity<Todo> response = controller.read(id);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void TodoControllerTestReadBadRequest() {
+        TodoController controller = new TodoController();
+        String id = "8";     //not existent id
+        ResponseEntity<Todo> response = controller.read(id);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    //------------------------------------------------------------------------------
+    // testing function update()
+    @Test
+    public void TodoControllerTestUpdateOk() {
+        // creating a todo before updating it
+        TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
+        TodoController controller = new TodoController();
+        controller.create(request);
+
+        String id = "1";
+        Boolean completed = true;
+        ResponseEntity<Todo> response = controller.update(id, completed);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void TodoControllerTestUpdateBadRequest() {
+        TodoController controller = new TodoController();
+
+        String id = "1";
+        Boolean completed = true;
+        ResponseEntity<Todo> response = controller.update(id, completed);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+    //------------------------------------------------------------------------------
+    // testing function delete()
+    @Test
+    public void TodoControllerTestDeleteOk() {
+        // creating a todo before deleting it
+        TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
+        TodoController controller = new TodoController();
+        controller.create(request);
+
+        String id = "1";
+        ResponseEntity<?> response = controller.delete(id);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void TodoControllerTestDeleteBadRequest() {
+        TodoController controller = new TodoController();
+
+        String id = "1";
+        ResponseEntity<?> response = controller.delete(id);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    //------------------------------------------------------------------------------
+    // testing function list()
+    @Test
+    public void TodoControllerTestListOk() {
+        TodoController controller = new TodoController();
+
+        // creating todos before listing them
+        TodoCreateRequest request1 = new TodoCreateRequest("title1", "the description of title1");
+        controller.create(request1);
+
+        TodoCreateRequest request2 = new TodoCreateRequest("title2", "the description of title2");
+        controller.create(request2);
+
+        ResponseEntity<List<Todo>> response = controller.list();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+
+    @Test
+    public void TodoControllerTestListBadRequest() {  // Always fails because of the unreachable area
+        TodoController controller = new TodoController();
+        ResponseEntity<List<Todo>> response = controller.list();
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    //------------------------------------------------------------------------------
+    // testing function listCompleted()
+    @Test
+    public void TodoControllerTestListCompletedOk() {
+        TodoController controller = new TodoController();
+
+        TodoCreateRequest request1 = new TodoCreateRequest("title1", "the description of title1");
+        controller.create(request1);
+
+        TodoCreateRequest request2 = new TodoCreateRequest("title2", "the description of title2");
+        controller.create(request2);
+
+        boolean completed = true;
+        controller.update("2", completed);
+
+        ResponseEntity<List<Todo>> response = controller.listCompleted();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void TodoControllerTestListCompletedBadRequest() { // Always fails because of the unreachable area
+        TodoController controller = new TodoController();
+        
+        ResponseEntity<List<Todo>> response = controller.listCompleted();
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+    // DONE!
 }
+
