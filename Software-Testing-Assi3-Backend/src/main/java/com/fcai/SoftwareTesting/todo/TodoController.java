@@ -14,12 +14,10 @@ public class TodoController {
     private TodoService todoService;
 
 
-    //////////////////////////////////////////////////////
-    public TodoController() {           // added it
+    public TodoController() //added
+    {           
         todoService = new TodoServiceImpl();
     }
-    //////////////////////////////////////////////////////
-
 
     @PostMapping("/create")
     public ResponseEntity<Todo> create(@RequestBody TodoCreateRequest todo) {

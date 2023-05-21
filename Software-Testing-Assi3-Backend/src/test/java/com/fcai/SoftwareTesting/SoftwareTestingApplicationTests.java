@@ -117,16 +117,6 @@ public class SoftwareTestingApplicationTests {
 		Todo updatedTodo = todoService.update("1", true);
 		assertTrue(updatedTodo.isCompleted());
 	}
-	
-	/*
-	@Test
-    public void TodoServiceImplTestUpdateValidTodoMock() {
-		Todo todo = new Todo("1", "Title", "Description", false);
-        TodoServiceImpl todoService = mock(TodoServiceImpl.class);
-        when(todoService.read("1")).thenReturn(todo);
-        Todo updatedTodo = todoService.update("1", true);
-        assertTrue(updatedTodo.isCompleted());
-    }*/
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//Testing delete() in the class TodoServiceImpl
@@ -161,6 +151,7 @@ public class SoftwareTestingApplicationTests {
         List<Todo> resultTodos = todoService.list();
         assertEquals(todosTemp, resultTodos);
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Test
     public void TodoServiceImplTestListNullTodos() //Always fails because of the unreachable area
@@ -190,14 +181,16 @@ public class SoftwareTestingApplicationTests {
         TodoServiceImpl todoService = new TodoServiceImpl();
         assertThrows(IllegalArgumentException.class, () -> todoService.listCompleted());
     }
-	/////////////////////////////////////////////////////////////////
-    /*************************************************
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*****************************************************
      * Testing TodoController Class
      ******************************************************/
 
     // testing function Create()
     @Test
-    public void TodoControllerTestCreateOk() {
+    public void TodoControllerTestCreateOk() 
+    {
         TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
         TodoController controller = new TodoController();
         ResponseEntity<Todo> response = controller.create(request);
@@ -207,7 +200,8 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestCreateBadRequestEmptyTitle() {
+    public void TodoControllerTestCreateBadRequestEmptyTitle() 
+    {
         TodoCreateRequest request = new TodoCreateRequest("","this is description");
         TodoController controller = new TodoController();
         ResponseEntity<Todo> response = controller.create(request);
@@ -217,7 +211,8 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestCreateBadRequestEmptyDescription() {
+    public void TodoControllerTestCreateBadRequestEmptyDescription() 
+    {
         TodoCreateRequest request = new TodoCreateRequest("title","");
         TodoController controller = new TodoController();
         ResponseEntity<Todo> response = controller.create(request);
@@ -227,7 +222,8 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestCreateBadRequestEmptyDescriptionAndTitle() {
+    public void TodoControllerTestCreateBadRequestEmptyDescriptionAndTitle() 
+    {
         TodoCreateRequest request = new TodoCreateRequest("","");
         TodoController controller = new TodoController();
         ResponseEntity<Todo> response = controller.create(request);
@@ -238,7 +234,8 @@ public class SoftwareTestingApplicationTests {
     //------------------------------------------------------------------------------
     // testing function Read()
     @Test
-    public void TodoControllerTestReadOk() {
+    public void TodoControllerTestReadOk() 
+    {
         // creating a todo before reading it
         TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
         TodoController controller = new TodoController();
@@ -251,9 +248,10 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestReadBadRequest() {
+    public void TodoControllerTestReadBadRequest()
+     {
         TodoController controller = new TodoController();
-        String id = "8";     //not existent id
+        String id = "1";     //not existent id
         ResponseEntity<Todo> response = controller.read(id);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNull(response.getBody());
@@ -262,7 +260,8 @@ public class SoftwareTestingApplicationTests {
     //------------------------------------------------------------------------------
     // testing function update()
     @Test
-    public void TodoControllerTestUpdateOk() {
+    public void TodoControllerTestUpdateOk() 
+    {
         // creating a todo before updating it
         TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
         TodoController controller = new TodoController();
@@ -276,7 +275,8 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestUpdateBadRequest() {
+    public void TodoControllerTestUpdateBadRequest() 
+    {
         TodoController controller = new TodoController();
 
         String id = "1";
@@ -288,7 +288,8 @@ public class SoftwareTestingApplicationTests {
     //------------------------------------------------------------------------------
     // testing function delete()
     @Test
-    public void TodoControllerTestDeleteOk() {
+    public void TodoControllerTestDeleteOk() 
+    {
         // creating a todo before deleting it
         TodoCreateRequest request = new TodoCreateRequest("title1", "the description of title1");
         TodoController controller = new TodoController();
@@ -300,7 +301,8 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestDeleteBadRequest() {
+    public void TodoControllerTestDeleteBadRequest() 
+    {
         TodoController controller = new TodoController();
 
         String id = "1";
@@ -311,7 +313,8 @@ public class SoftwareTestingApplicationTests {
     //------------------------------------------------------------------------------
     // testing function list()
     @Test
-    public void TodoControllerTestListOk() {
+    public void TodoControllerTestListOk() 
+    {
         TodoController controller = new TodoController();
 
         // creating todos before listing them
@@ -328,7 +331,8 @@ public class SoftwareTestingApplicationTests {
 
 
     @Test
-    public void TodoControllerTestListBadRequest() {  // Always fails because of the unreachable area
+    public void TodoControllerTestListBadRequest() // Always fails because of the unreachable area
+    {
         TodoController controller = new TodoController();
         ResponseEntity<List<Todo>> response = controller.list();
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -338,7 +342,8 @@ public class SoftwareTestingApplicationTests {
     //------------------------------------------------------------------------------
     // testing function listCompleted()
     @Test
-    public void TodoControllerTestListCompletedOk() {
+    public void TodoControllerTestListCompletedOk() 
+    {
         TodoController controller = new TodoController();
 
         TodoCreateRequest request1 = new TodoCreateRequest("title1", "the description of title1");
@@ -356,9 +361,9 @@ public class SoftwareTestingApplicationTests {
     }
 
     @Test
-    public void TodoControllerTestListCompletedBadRequest() { // Always fails because of the unreachable area
+    public void TodoControllerTestListCompletedBadRequest() // Always fails because of the unreachable area
+    { 
         TodoController controller = new TodoController();
-        
         ResponseEntity<List<Todo>> response = controller.listCompleted();
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNull(response.getBody());
