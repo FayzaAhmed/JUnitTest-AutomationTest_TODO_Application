@@ -40,7 +40,7 @@ To run the frontend automation tests, you will need the following: <br>
 - WebDriver for Chrome
 
 ### Running the Tests
-To run the frontend automation tests, navigate to the frontend-automation-testing directory and run the following command:
+To run the frontend automation tests, navigate to the Software-Testing-Assi3-Frontend directory and run the following command:
 ```
 python test.py
 ```
